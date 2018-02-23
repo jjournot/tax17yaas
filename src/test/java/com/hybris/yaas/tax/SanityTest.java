@@ -1,7 +1,10 @@
 package com.hybris.yaas.tax;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
+import model.TaxRequest;
+import model.TaxResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -25,7 +28,10 @@ public class SanityTest
 	public void getResponseFromCall() throws Exception
 	{
 		final TestRestTemplate restTemplate = new TestRestTemplate();
-		BigDecimal taxAmount = restTemplate.getForObject(SERVICE_URL + AMOUNT_ONE_HUNDRED, BigDecimal.class);
-		assertEquals(taxAmount, TAX_SEVENTEEN);
+		TaxRequest taxRequest = new TaxRequest();
+		taxRequest.setDate(new Date());
+		taxRequest.setAmount(AMOUNT_ONE_HUNDRED);
+		TaxResponse taxResponse = restTemplate.postForObject(SERVICE_URL, taxRequest, TaxResponse.class);
+		assertEquals(taxResponse.getTaxAmount(), TAX_SEVENTEEN);
 	}
 }
